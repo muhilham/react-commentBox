@@ -1,8 +1,4 @@
 'use strict';
-var data = [
-  {id: 1, author: "Pete Hunt", text: "This is one comment"},
-  {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
-];
 
 /**
  * [renderComment description]
@@ -32,7 +28,7 @@ function _comment(comment) {
 }
 
 function renderCommentList() {
-  var commentNodes = this.props.data.map(_comment);
+  var commentNodes = this.props.commentData.map(_comment);
 
   return (
     <div className="commentList">
@@ -52,14 +48,44 @@ function renderCommentBox() {
   return (
     <div className="commentBox">
       <h1>Comments</h1>
-      <CommentList data={this.state.data} />
+      <CommentList commentData={this.state.comments} />
       <CommentForm />
     </div>
   );
 }
 
 function getInitialStateCommentBox() {
-  return {data: []};
+  return {
+    comments: [] //This will be replace with the new one from the server
+  };
+}
+
+function componentDidMountCommentBox() {
+  var ajaxRequest = {
+    url: this.props.url,
+    dataType: 'json',
+    cache: false,
+    success: _success.bind(this),
+    error: _error.bind(this)
+  };
+
+  return $.ajax(ajaxRequest);
+}
+
+function _success(data) {
+  var _data = {
+    comments: data
+  };
+
+  /**
+   * replace the old array of comments with the new one from the server
+   * and the UI automatically updates itself.
+   */
+  return this.setState(_data);
+}
+
+function _error(xhr, status, err) {
+  return console.error(this.props.url, status, err.toString());
 }
 /**
  * [render description]
@@ -68,6 +94,10 @@ function getInitialStateCommentBox() {
  * [getInitialState description]
  * executes exactly once during the lifecycle of the component
  * and sets up the initial state of the component
+ *
+ * [componentDidMount description]
+ * method called automatically by React
+ * after a component is rendered for the first time
  */
 var createClassComment = {
   render: renderComment
@@ -83,6 +113,7 @@ var createClassCommentForm = {
 
 var createClassCommentBox = {
   getInitialState: getInitialStateCommentBox,
+  componentDidMount: componentDidMountCommentBox,
   render: renderCommentBox
 };
 
