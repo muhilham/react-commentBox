@@ -3,6 +3,7 @@ var data = [
   {id: 1, author: "Pete Hunt", text: "This is one comment"},
   {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
 ];
+
 /**
  * [renderComment description]
  * By surrounding a JavaScript expression in braces inside JSX (as either an attribute or child),
@@ -22,11 +23,20 @@ function renderComment() {
   );
 }
 
+function _comment(comment) {
+  return (
+    <Comment author={comment.author} key={comment.id}>
+      {comment.text}
+    </Comment>
+  );
+}
+
 function renderCommentList() {
+  var commentNodes = this.props.data.map(_comment);
+
   return (
     <div className="commentList">
-      <Comment author="Pete Hunt">This is one comment {/*This goes to this.props.children*/}</Comment>
-      <Comment author="Jordan Walke">This is *another* comment</Comment>
+      {commentNodes}
     </div>
   );
 }
@@ -42,15 +52,22 @@ function renderCommentBox() {
   return (
     <div className="commentBox">
       <h1>Comments</h1>
-      <CommentList data={this.props.data} />
+      <CommentList data={this.state.data} />
       <CommentForm />
     </div>
   );
 }
 
+function getInitialStateCommentBox() {
+  return {data: []};
+}
 /**
  * [render description]
  * @return a tree of React components that will eventually render to HTML
+ *
+ * [getInitialState description]
+ * executes exactly once during the lifecycle of the component
+ * and sets up the initial state of the component
  */
 var createClassComment = {
   render: renderComment
@@ -65,6 +82,7 @@ var createClassCommentForm = {
 };
 
 var createClassCommentBox = {
+  getInitialState: getInitialStateCommentBox,
   render: renderCommentBox
 };
 
@@ -86,6 +104,6 @@ var CommentBox = React.createClass(createClassCommentBox);
  *   == provided as the second argument ==
  */
 ReactDOM.render(
-  <CommentBox data={data}/>,
+  <CommentBox url='api/comments'/>,
   document.getElementById('content')
 );
