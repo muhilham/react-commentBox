@@ -54,14 +54,8 @@ function renderCommentBox() {
   );
 }
 
-function getInitialStateCommentBox() {
-  return {
-    comments: [] //This will be replace with the new one from the server
-  };
-}
-
-function componentDidMountCommentBox() {
-  var ajaxRequest = {
+function loadCommentsFromServer() {
+  let ajaxRequest = {
     url: this.props.url,
     dataType: 'json',
     cache: false,
@@ -70,6 +64,18 @@ function componentDidMountCommentBox() {
   };
 
   return $.ajax(ajaxRequest);
+}
+
+function getInitialStateCommentBox() {
+  return {
+    comments: [] //This will be replace with the new one from the server
+  };
+}
+
+function componentDidMountCommentBox() {
+  this.loadCommentsFromServer();
+  setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  return;
 }
 
 function _success(data) {
@@ -98,6 +104,10 @@ function _error(xhr, status, err) {
  * [componentDidMount description]
  * method called automatically by React
  * after a component is rendered for the first time
+ *
+ * [loadCommentsFromServer description] - custom method
+ * move the AJAX call to a separate method
+ * and call it when the component is first loaded
  */
 var createClassComment = {
   render: renderComment
@@ -112,6 +122,7 @@ var createClassCommentForm = {
 };
 
 var createClassCommentBox = {
+  loadCommentsFromServer: loadCommentsFromServer,
   getInitialState: getInitialStateCommentBox,
   componentDidMount: componentDidMountCommentBox,
   render: renderCommentBox
@@ -135,6 +146,6 @@ var CommentBox = React.createClass(createClassCommentBox);
  *   == provided as the second argument ==
  */
 ReactDOM.render(
-  <CommentBox url='api/comments'/>,
+  <CommentBox url='api/comments' pollInterval={2000}/>,
   document.getElementById('content')
 );
