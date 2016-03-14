@@ -40,6 +40,11 @@ function renderCommentList() {
 function renderCommentForm() {
   return (
     <div className="commentForm">
+      <form className="commentForm">
+        <input type="text" placeholder="Your name" />
+        <input type="text" placeholder="Say something..." />
+        <input type="submit" value="Post" />
+      </form>
     </div>
   );
 }
