@@ -65,10 +65,33 @@ function handleTextChange(e) {
   return this.setState(data);
 }
 
+/**
+ * [handleSubmit description]
+ * When the user submits the form,
+ * we should clear it,
+ * submit a request to the server,
+ * and refresh the list of comments.
+ */
+function handleSubmit(e) {
+  e.preventDefault(); // why ??
+  var author = this.state.author.trim();
+  var text = this.state.text.trim();
+  if (!text || !author) {
+    return;
+  }
+
+  // TODO: send request to the server
+  let data = {
+    author: '',
+    text: ''
+  };
+  this.setState(data);
+}
+
 function renderCommentForm() {
   return (
     <div className="commentForm">
-      <form className="commentForm">
+      <form className="commentForm" onSubmit={this.handleSubmit}> {/* attach an onSubmit handler to the form*/}
         <input
           type="text"
           placeholder="Your name"
@@ -166,6 +189,7 @@ var createClassCommentForm = {
   getInitialState: getInitialStateCommentForm,
   handleAuthorChange: handleAuthorChange,
   handleTextChange: handleTextChange,
+  handleSubmit: handleSubmit,
   render: renderCommentForm
 };
 
