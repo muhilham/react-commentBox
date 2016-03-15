@@ -73,7 +73,7 @@ function handleTextChange(e) {
  * and refresh the list of comments.
  */
 function handleSubmit(e) {
-  e.preventDefault(); // why ??
+  e.preventDefault(); // why ?? prevent the browser's default action of submitting the form
   var author = this.state.author.trim();
   var text = this.state.text.trim();
   if (!text || !author) {
