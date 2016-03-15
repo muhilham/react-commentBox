@@ -8,6 +8,8 @@
  * We access named attributes passed to the component as keys on this.props
  * and any nested elements as this.props.children.
  */
+
+/*Comment*/
 function renderComment() {
   return (
     <div className="comment">
@@ -27,6 +29,7 @@ function _comment(comment) {
   );
 }
 
+/*Comment List*/
 function renderCommentList() {
   var commentNodes = this.props.commentData.map(_comment);
 
@@ -37,28 +40,54 @@ function renderCommentList() {
   );
 }
 
+/*Comment Form*/
+function getInitialStateCommentForm() {
+  let data = {
+    author: '',
+    text: ''
+  };
+  return data;
+}
+
+function handleAuthorChange(e) {
+  let data = {
+    author: e.target.value
+  };
+
+  return this.setState(data);
+}
+
+function handleTextChange(e) {
+  let data = {
+    text: e.target.value
+  };
+
+  return this.setState(data);
+}
+
 function renderCommentForm() {
   return (
     <div className="commentForm">
       <form className="commentForm">
-        <input type="text" placeholder="Your name" />
-        <input type="text" placeholder="Say something..." />
+        <input
+          type="text"
+          placeholder="Your name"
+          value={this.state.author}
+          onChange={this.handleAuthorChange}
+        />
+        <input
+          type="text"
+          placeholder="Say something..."
+          value={this.state.text}
+          onChange={this.handleTextChange}
+        />
         <input type="submit" value="Post" />
       </form>
     </div>
   );
 }
 
-function renderCommentBox() {
-  return (
-    <div className="commentBox">
-      <h1>Comments</h1>
-      <CommentList commentData={this.state.comments} />
-      <CommentForm />
-    </div>
-  );
-}
-
+/*Comment Box*/
 function loadCommentsFromServer() {
   let ajaxRequest = {
     url: this.props.url,
@@ -72,9 +101,10 @@ function loadCommentsFromServer() {
 }
 
 function getInitialStateCommentBox() {
-  return {
+  let data = {
     comments: [] //This will be replace with the new one from the server
   };
+  return data;
 }
 
 function componentDidMountCommentBox() {
@@ -97,6 +127,16 @@ function _success(data) {
 
 function _error(xhr, status, err) {
   return console.error(this.props.url, status, err.toString());
+}
+
+function renderCommentBox() {
+  return (
+    <div className="commentBox">
+      <h1>Comments</h1>
+      <CommentList commentData={this.state.comments} />
+      <CommentForm />
+    </div>
+  );
 }
 /**
  * [render description]
@@ -123,6 +163,9 @@ var createClassCommentList = {
 };
 
 var createClassCommentForm = {
+  getInitialState: getInitialStateCommentForm,
+  handleAuthorChange: handleAuthorChange,
+  handleTextChange: handleTextChange,
   render: renderCommentForm
 };
 
