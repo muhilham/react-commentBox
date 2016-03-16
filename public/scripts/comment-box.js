@@ -123,8 +123,21 @@ function loadCommentsFromServer() {
   return $.ajax(ajaxRequest);
 }
 
+/**
+ * [handleCommentSubmit description]
+ * submit to the server and refresh the list
+ */
 function handleCommentSubmit(comment) {
-  // TODO: submit to the server and refresh the list
+  let ajaxRequest = {
+    url: this.props.url,
+    dataType: 'json',
+    type: 'POST',
+    data: comment,
+    success: _success.bind(this),
+    error: _error.bind(this)
+  };
+
+  $.ajax(ajaxRequest);
 }
 
 function getInitialStateCommentBox() {
