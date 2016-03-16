@@ -123,6 +123,10 @@ function loadCommentsFromServer() {
   return $.ajax(ajaxRequest);
 }
 
+function handleCommentSubmit(comment) {
+  // TODO: submit to the server and refresh the list
+}
+
 function getInitialStateCommentBox() {
   let data = {
     comments: [] //This will be replace with the new one from the server
@@ -157,7 +161,7 @@ function renderCommentBox() {
     <div className="commentBox">
       <h1>Comments</h1>
       <CommentList commentData={this.state.comments} />
-      <CommentForm />
+      <CommentForm onCommentSubmit={this.handleCommentSubmit} />
     </div>
   );
 }
@@ -195,6 +199,7 @@ var createClassCommentForm = {
 
 var createClassCommentBox = {
   loadCommentsFromServer: loadCommentsFromServer,
+  handleCommentSubmit: handleCommentSubmit,
   getInitialState: getInitialStateCommentBox,
   componentDidMount: componentDidMountCommentBox,
   render: renderCommentBox
