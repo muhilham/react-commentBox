@@ -80,7 +80,7 @@ function handleSubmit(e) {
     return;
   }
 
-  // TODO: send request to the server
+  this.props.onCommentSubmit({author: author, text: text}); //send request to the server
   let data = {
     author: '',
     text: ''
